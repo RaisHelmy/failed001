@@ -23,7 +23,6 @@ include("fb_files/fb_index_file/fb_background_file/index_background.php");
 	}
 </script>
 <body>
-	<!--login form-->
 	<form  method="post">
 		<div style="position:absolute; left:57.7%; top:2.2%; font-size:12px; color:#FFFFFF;">   Email </div> 
 		<div style="position:absolute; left:57.7%; top:5.18%; font-size:11px; "> <input type="text" name="username" style="width:149.5;"/> </div>
