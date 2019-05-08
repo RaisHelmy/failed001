@@ -20,5 +20,12 @@ func main() {
     )
   })
 
+  e.GET("/html", func(c echo.Context) error {
+    return c.HTML(
+      http.StatusOK,
+      "<h1>Hello, Boatswain!</h1>",
+    )
+  })
+
   e.Logger.Fatal(e.Start(":1323"))
 }
