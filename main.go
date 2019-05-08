@@ -1,31 +1,36 @@
 package main
 
 import (
-  "net/http"
+  "html/template"
+  "io"
 
   "github.com/labstack/echo"
+
+  "gitlab.com/ykyuen/golang-echo-template-example/handler"
 )
 
+// Define the template registry struct
+type TemplateRegistry struct {
+  templates *template.Template
+}
+
+// Implement e.Renderer interface
+func (t *TemplateRegistry) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+  return t.templates.ExecuteTemplate(w, name, data)
+}
+
 func main() {
+  // Echo instance
   e := echo.New()
 
-  e.GET("/", func(c echo.Context) error {
-    return c.String(http.StatusOK, "Hello, World!")
-  })
+  // Instantiate a template registry and register all html files inside the view folder
+  e.Renderer = &TemplateRegistry{
+    templates: template.Must(template.ParseGlob("view/*.html")),
+  }
 
-  e.GET("/json", func(c echo.Context) error {
-    return c.JSONBlob(
-      http.StatusOK,
-      []byte(`{ "id": "1", "msg": "Hello, Boatswain!" }`),
-    )
-  })
+  // Route => handler
+  e.GET("/", handler.HomeHandler)
 
-  e.GET("/html", func(c echo.Context) error {
-    return c.HTML(
-      http.StatusOK,
-      "<h1>Hello, Boatswain!</h1>",
-    )
-  })
-
+  // Start the Echo server
   e.Logger.Fatal(e.Start(":1323"))
 }
